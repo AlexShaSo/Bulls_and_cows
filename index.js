@@ -15,19 +15,27 @@ function generateNumber() {
 
   function compareNumbers(secret, guess) {
 	let cows = 0;
-  let bulls = 0;
-  for (let i = 0; i < 4; i++) {
-    if (secret[i] === guess[i]) {
-      bulls++;
-    } else if (secret.includes(guess[i])) {
-      cows++;
-    }
+	let bulls = 0;
+  
+	// Сначала считаем быков
+	for (let i = 0; i < 4; i++) {
+	  if (secret[i] === guess[i]) {
+		bulls++;
+	  }
+	}
+  
+	// Затем считаем коров, включая быков
+	for (let i = 0; i < 4; i++) {
+	  for (let j = 0; j < 4; j++) {
+		if (secret[i] === guess[j]) { 
+		  cows++;
+		  break;
+		}
+	  }
+	}
+  
+	return { cows, bulls };
   }
-  if (bulls === 4) {
-    cows = bulls;
-  } 
-  return { cows, bulls };
-}
   
   function playGame(userName, secretNumber) {
 	for (let attempts = 0; attempts < 10; attempts++) {
