@@ -1,22 +1,45 @@
-const greetingsPlayer = () => {
-	const name = readlineSync.question('Здравствуй! Как обращаться к тебе? ');
-	console.log(`Приветствую тебя, ${name}!`/n + 'Нужно собрать стадо из быков и коров');
-};
+import readlineSync from 'readline-sync'
 
-const chooseOpponent = () => {
-    const opponentChoice = readlineSync.question('С кем хочешь соревноваться? С компьютером(c) или с другим игроком(o)? (c/o) ').toLowerCase();
+export const greetingsPlayer = () => {
+    const userName = readlineSync.question('Как тебя зовут? ');
+    console.log(`Приветствую тебя, ${userName}!\n Твоя задача собрать стадо из коров и быков.\n Читай описание в readme`);
+    return userName;
+  }
+
+export const chooseOpponent = () => {
+  let attempts = 0;
+  while (attempts < 3) {
+    const opponentChoice = readlineSync.question('С кем будешь соревноваться? (c - компьютер, o - другой игрок): ').toLowerCase();
+    
     switch (opponentChoice) {
       case 'c':
         return 'computer';
       case 'o':
-        return 'other';
+        return 'player';
       default:
-        return console.log('Не понял вашего ответа.'), opponentChoice;
+        console.log('Простите, не понял вашего запроса.');
+        attempts++;
     }
   }
+  console.log('Простите, пока мы дискутировали, животные окончательно разбежались. До свиданья.');
+  process.exit();
+}
 
-export default { greetingsPlayer, chooseOpponent };
-
-// 1. greetingsPlayer Функция с приветствием игрока и выбора оппонента
-// 2. chooseOpponent Функция предоставляющая выбор игроку, с кем будет соревноваться
-
+export const getOpponentNumber = (userName) => {
+  while (true) {
+    const opponentName = readlineSync.question('Здравствуй, хитрец! Как тебя зовут? ');
+    if (opponentName === userName) {
+      console.log('Сам с собой играешь?!)))');
+    } else {
+      while (true) {
+        const numberStr = readlineSync.question('Введи свой набор из 4 разных цифр: ');
+        const numbers = numberStr.split('').map(Number);
+        if (numbers.length === 4 && new Set(numbers).size === 4) {
+          return numbers;
+        } else {
+          console.log('Числа не должны повторяться! Выбери другой набор чисел.');
+        }
+      }
+    }
+  }
+};
